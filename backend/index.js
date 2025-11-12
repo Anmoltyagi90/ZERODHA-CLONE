@@ -6,10 +6,10 @@ const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const { UserModel } = require("./model/UserModel");
-const { HoldingsModel } = require("./model/HoldingsModel");
-const { PositionsModel } = require("./model/PositionsModel");
-const { OrdersModel } = require("./model/OrdersModel");
+const { UserModel } = require("./schemas/UserSchema");
+const { HoldingsModel } = require("./schemas/HoldingsSchema");
+const { PositionsModel } = require("./schemas/PositionsSchema");
+const { OrdersModel } = require("./schemas/OrdersSchema");
 
 
 const PORT = process.env.PORT || 3002;
