@@ -1,33 +1,89 @@
-import React from "react";
-import { useState, useEffect } from "react";
-
+import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { VerticlaGraph } from "./VerticalGraph";
-
-// import { holdings } from "../data/data";
+import { useAuth } from "../context/AuthContext";
 
 const Holdings = () => {
+  const { isAuthenticated } = useAuth();
   const [allHoldings, setAllHoldings] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get("http://localhost:3002/allHoldings").then((res) => {
-      setAllHoldings(res.data);
-    });
-  }, []);
+    if (!isAuthenticated) {
+      return;
+    }
+
+    let cancelled = false;
+    const fetchHoldings = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const token = localStorage.getItem("token");
+        const response = await axios.get("http://localhost:3002/allHoldings", {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+        if (!cancelled) {
+          setAllHoldings(response.data || []);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(
+            err.response?.data?.message || "Failed to load holdings from server."
+          );
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchHoldings();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isAuthenticated]);
 
   // const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-  const labels = allHoldings.map((stock) => stock.name);
+  const labels = useMemo(() => allHoldings.map((stock) => stock.name), [allHoldings]);
 
-  const data = {
-    labels,
-    datasets: [
-      {
-        label: "Stock Price",
-        data: allHoldings.map((stock) => stock.price),
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-    ],
-  };
+  const chartData = useMemo(
+    () => ({
+      labels,
+      datasets: [
+        {
+          label: "Stock Price",
+          data: allHoldings.map((stock) => Number(stock.price) || 0),
+          backgroundColor: "rgba(255, 99, 132, 0.5)",
+        },
+      ],
+    }),
+    [labels, allHoldings]
+  );
+
+  const totals = useMemo(
+    () =>
+      allHoldings.reduce(
+        (acc, stock) => {
+          const qty = Number(stock.qty) || 0;
+          const avg = Number(stock.avg) || 0;
+          const price = Number(stock.price) || 0;
+          const invested = avg * qty;
+          const current = price * qty;
+          const pnl = current - invested;
+
+          acc.invested += invested;
+          acc.current += current;
+          acc.pnl += pnl;
+
+          return acc;
+        },
+        { invested: 0, current: 0, pnl: 0 }
+      ),
+    [allHoldings]
+  );
   // export const data = {
   //   labels,
   //   datasets: [
@@ -50,6 +106,15 @@ const Holdings = () => {
         Holdings ({allHoldings.length})
       </h3>
 
+      {loading && (
+        <div className="mb-4 text-blue-600 text-sm">Loading holdings…</div>
+      )}
+      {error && (
+        <div className="mb-4 text-red-500 text-sm" role="alert">
+          {error}
+        </div>
+      )}
+
       <div className="overflow-x-auto">
         <table className="min-w-full text-sm text-gray-700 border-t">
           <thead className="text-gray-500 uppercase text-xs border-b">
@@ -66,18 +131,36 @@ const Holdings = () => {
           </thead>
 
           <tbody>
+            {allHoldings.length === 0 && !loading && !error && (
+              <tr>
+                <td colSpan={8} className="py-4 text-center text-gray-500">
+                  No holdings available yet.
+                </td>
+              </tr>
+            )}
             {allHoldings.map((stock, index) => {
               // Calculations
-              const currentValue = stock.price * stock.qty;
-              const investedValue = stock.avg * stock.qty;
+              const qty = Number(stock.qty) || 0;
+              const avg = Number(stock.avg) || 0;
+              const price = Number(stock.price) || 0;
+              const currentValue = price * qty;
+              const investedValue = avg * qty;
               const pnl = currentValue - investedValue;
-              const pnlPercent = (pnl / investedValue) * 100;
+              const pnlPercent = investedValue
+                ? (pnl / investedValue) * 100
+                : 0;
 
-              const netChange = stock.price - stock.avg;
-              const netChangePercent = (netChange / stock.avg) * 100;
+              const netChange = price - avg;
+              const netChangePercent = avg ? (netChange / avg) * 100 : 0;
 
               const isProfit = pnl >= 0;
               const pnlClass = isProfit ? "text-green-600" : "text-red-500";
+              const dayChangeDisplay =
+                typeof stock.day === "string"
+                  ? stock.day
+                  : stock.dayChange != null
+                  ? `${Number(stock.dayChange).toFixed(2)}%`
+                  : "--";
 
               return (
                 <tr
@@ -85,9 +168,9 @@ const Holdings = () => {
                   className="border-b hover:bg-gray-50 transition"
                 >
                   <td className="py-2 px-3 font-medium">{stock.name}</td>
-                  <td className="py-2 px-3">{stock.qty}</td>
-                  <td className="py-2 px-3">₹{stock.avg.toFixed(2)}</td>
-                  <td className="py-2 px-3">₹{stock.price.toFixed(2)}</td>
+                  <td className="py-2 px-3">{qty}</td>
+                  <td className="py-2 px-3">₹{avg.toFixed(2)}</td>
+                  <td className="py-2 px-3">₹{price.toFixed(2)}</td>
                   <td className="py-2 px-3">₹{currentValue.toFixed(2)}</td>
 
                   <td
@@ -104,7 +187,7 @@ const Holdings = () => {
                   </td>
 
                   <td className={`py-2 px-3 text-right ${pnlClass}`}>
-                    {stock.dayChange ? `${stock.dayChange.toFixed(2)}%` : "--"}
+                    {dayChangeDisplay}
                   </td>
                 </tr>
               );
@@ -117,38 +200,25 @@ const Holdings = () => {
         <div className="flex justify-between">
           <span>Total Investment</span>
           <span>
-            ₹{allHoldings.reduce((acc, s) => acc + s.avg * s.qty, 0).toFixed(2)}
+            ₹{totals.invested.toFixed(2)}
           </span>
         </div>
         <div className="flex justify-between">
           <span>Current Value</span>
           <span>
-            ₹
-            {allHoldings
-              .reduce((acc, s) => acc + s.price * s.qty, 0)
-              .toFixed(2)}
+            ₹{totals.current.toFixed(2)}
           </span>
         </div>
         <div className="flex justify-between">
           <span>Total P&amp;L</span>
           <span
-            className={
-              allHoldings.reduce(
-                (acc, s) => acc + s.price * s.qty - s.avg * s.qty,
-                0
-              ) >= 0
-                ? "text-green-600"
-                : "text-red-500"
-            }
+            className={totals.pnl >= 0 ? "text-green-600" : "text-red-500"}
           >
-            ₹
-            {allHoldings
-              .reduce((acc, s) => acc + s.price * s.qty - s.avg * s.qty, 0)
-              .toFixed(2)}
+            ₹{totals.pnl.toFixed(2)}
           </span>
         </div>
       </div>
-      <VerticlaGraph data={data} />
+      <VerticlaGraph data={chartData} />
     </div>
   );
 };

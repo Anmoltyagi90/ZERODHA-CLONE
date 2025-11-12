@@ -28,12 +28,8 @@ const Login = () => {
       const res = await axios.post("http://localhost:3002/auth/login", form);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
-      
-      // Redirect to dashboard with token in URL (since localStorage is separate per port)
-      // Dashboard will extract token from URL and store in its localStorage
-      const token = encodeURIComponent(res.data.token);
-      const userData = encodeURIComponent(JSON.stringify(res.data.user));
-      window.location.href = `http://localhost:3001?token=${token}&user=${userData}`;
+
+      navigate("/dashboard", { replace: true });
     } catch (err) {
       setError(err.response?.data?.message || "Login failed. Please try again.");
     } finally {
