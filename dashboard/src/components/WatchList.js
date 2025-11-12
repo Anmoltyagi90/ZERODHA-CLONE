@@ -1,166 +1,155 @@
+// src/components/WatchList.js
 import React, { useState, useContext } from "react";
-import { Tooltip, Grow } from "@mui/material";
-import { BarChart3, ChevronDown, ChevronUp } from "lucide-react";
-import { watchlist } from "../data/data";
+import axios from "axios";
 import GeneralContext from "./GeneralContext";
-import { DoughnutGraph } from "./DoughnoutGraph";
+import { Tooltip, Grow } from "@mui/material";
+import {
+  BarChartOutlined,
+  KeyboardArrowDown,
+  KeyboardArrowUp,
+  MoreHoriz,
+} from "@mui/icons-material";
+import { watchlist } from "../data/data";
+import { DoughnutChart } from "./DoughnutChart"; // ✅ Fixed spelling
+
+const labels = watchlist.map((item) => item.name);
 
 const WatchList = () => {
-  const [hoveredRow, setHoveredRow] = useState(null);
-  const [openDropdown, setOpenDropdown] = useState(null);
-
-  // ✅ include both openBuyWindow and openSellWindow
-  const { openBuyWindow, openSellWindow } = useContext(GeneralContext);
-
-  const toggleDropdown = (index) => {
-    setOpenDropdown(openDropdown === index ? null : index);
-  };
- 
-  const labels=watchlist.map((stock)=>stock.name)
-  const data={
+  const data = {
     labels,
-    datasets:[
-       {
-        label: 'price',
-        data: watchlist.map((stock)=>stock.price),
+    datasets: [
+      {
+        label: "Price",
+        data: watchlist.map((stock) => stock.price),
         backgroundColor: [
-          'rgba(255, 99, 132, 0.5)',
-          'rgba(54, 162, 235, 0.5)',
-          'rgba(255, 206, 86, 0.5)',
-          'rgba(75, 192, 192, 0.5)',
-          'rgba(153, 102, 255, 0.5)',
-          'rgba(255, 159, 64, 0.5)',
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
+          "rgba(59, 130, 246, 0.5)",
+          "rgba(34, 197, 94, 0.5)",
+          "rgba(239, 68, 68, 0.5)",
+          "rgba(234, 179, 8, 0.5)",
+          "rgba(147, 51, 234, 0.5)",
+          "rgba(249, 115, 22, 0.5)",
         ],
         borderWidth: 1,
       },
-    ]
-  }
-
-  //     export const data = {
-  //   labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-  //   datasets: [
-  //     {
-  //       label: '# of Votes',
-  //       data: [12, 19, 3, 5, 2, 3],
-  //       backgroundColor: [
-  //         'rgba(255, 99, 132, 0.2)',
-  //         'rgba(54, 162, 235, 0.2)',
-  //         'rgba(255, 206, 86, 0.2)',
-  //         'rgba(75, 192, 192, 0.2)',
-  //         'rgba(153, 102, 255, 0.2)',
-  //         'rgba(255, 159, 64, 0.2)',
-  //       ],
-  //       borderColor: [
-  //         'rgba(255, 99, 132, 1)',
-  //         'rgba(54, 162, 235, 1)',
-  //         'rgba(255, 206, 86, 1)',
-  //         'rgba(75, 192, 192, 1)',
-  //         'rgba(153, 102, 255, 1)',
-  //         'rgba(255, 159, 64, 1)',
-  //       ],
-  //       borderWidth: 1,
-  //     },
-  //   ],
-  // };
+    ],
+  };
 
   return (
-    <div className="w-full border-r bg-white ps-3 py-4 px-3">
-      <h2 className="font-semibold text-gray-700 mb-4 text-sm uppercase">
-        Watchlist {watchlist.length}/50
-      </h2>
-
-      <div className="flex flex-col gap-3 text-sm">
-        {watchlist.map((stock, index) => (
-          <div
-            key={index}
-            className="flex justify-between items-center border-b pb-2 text-gray-700 hover:bg-gray-50 transition-all duration-200 cursor-pointer rounded px-2 relative"
-            onMouseEnter={() => setHoveredRow(index)}
-            onMouseLeave={() => setHoveredRow(null)}
-          >
-            <div>
-              <p className="font-semibold text-gray-800">{stock.name}</p>
-              <p className="text-xs text-gray-500">₹{stock.price}</p>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <span className={`${stock.color} text-xs font-semibold`}>
-                {stock.change}
-              </span>
-
-              {hoveredRow === index && (
-                <div className="flex items-center gap-2 transition-all duration-200">
-                  <Tooltip title="Buy" arrow TransitionComponent={Grow}>
-                    <button
-                      onClick={() => openBuyWindow(stock.uid)}
-                      className="bg-blue-500 text-white px-2 py-1 rounded text-xs font-semibold"
-                    >
-                      B
-                    </button>
-                  </Tooltip>
-
-                  <Tooltip title="Sell" arrow TransitionComponent={Grow}>
-                    <button
-                      onClick={() => openSellWindow(stock.uid)}
-                      className="bg-orange-500 text-white px-2 py-1 rounded text-xs font-semibold"
-                    >
-                      S
-                    </button>
-                  </Tooltip>
-
-                  <Tooltip title="Chart" arrow TransitionComponent={Grow}>
-                    <BarChart3 className="w-4 h-4 text-gray-600 hover:text-blue-600" />
-                  </Tooltip>
-
-                  <div className="relative">
-                    <Tooltip
-                      title="More options"
-                      arrow
-                      TransitionComponent={Grow}
-                    >
-                      <button
-                        onClick={() => toggleDropdown(index)}
-                        className="p-1 rounded hover:bg-gray-200"
-                      >
-                        {openDropdown === index ? (
-                          <ChevronUp className="w-4 h-4 text-gray-700" />
-                        ) : (
-                          <ChevronDown className="w-4 h-4 text-gray-700" />
-                        )}
-                      </button>
-                    </Tooltip>
-
-                    {openDropdown === index && (
-                      <div className="absolute right-0 top-6 bg-white shadow-md border rounded-md text-xs text-gray-700 w-28">
-                        <p className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
-                          View details
-                        </p>
-                        <p className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
-                          Add to portfolio
-                        </p>
-                        <p className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
-                          Remove
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        ))}
+    <div className="p-2 bg-gray-50 min-h-screen">
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-2xl font-semibold text-gray-800">
+          Watchlist ({watchlist.length}/50)
+        </h3>
       </div>
 
-      <DoughnutGraph data={data} />
+      <div className="flex items-center mb-6 bg-white shadow rounded-2xl p-3">
+        <input
+          type="text"
+          name="search"
+          id="search"
+          placeholder="Search eg: INFY, BSE, NIFTY FUT WEEKLY, GOLD MCX"
+          className="w-full bg-transparent outline-none px-3 text-gray-700 placeholder-gray-400"
+        />
+      </div>
+
+      <ul className="shadow-md rounded-xl">
+        {watchlist.map((stock, index) => (
+          <WatchListItem stock={stock} key={index} />
+        ))}
+      </ul>
+
+      <div className="mt-10 bg-white rounded-2xl shadow-md p-6">
+        <h4 className="text-lg font-semibold text-gray-700 mb-4">
+          Stock Price Distribution
+        </h4>
+        <DoughnutChart data={data} />
+      </div>
     </div>
   );
 };
 
 export default WatchList;
+
+const WatchListItem = ({ stock }) => {
+  const [showActions, setShowActions] = useState(false);
+
+  return (
+    <li
+      className="px-4 py-4 flex items-center justify-between hover:bg-gray-50 transition-all duration-150"
+      onMouseEnter={() => setShowActions(true)}
+      onMouseLeave={() => setShowActions(false)}
+    >
+      <div className="flex items-center gap-3">
+        <p
+          className={`font-medium ${
+            stock.isDown ? "text-red-600" : "text-green-600"
+          }`}
+        >
+          {stock.name}
+        </p>
+      </div>
+
+      <div className="flex items-center gap-3">
+        <span
+          className={`text-sm font-semibold ${
+            stock.isDown ? "text-red-600" : "text-green-600"
+          }`}
+        >
+          {stock.percent}
+        </span>
+        {stock.isDown ? (
+          <KeyboardArrowDown className="text-red-500" />
+        ) : (
+          <KeyboardArrowUp className="text-green-500" />
+        )}
+        <span className="text-gray-700 font-medium">{stock.price}</span>
+
+        {showActions && <WatchListActions uid={stock.name} />}
+      </div>
+    </li>
+  );
+};
+
+const WatchListActions = ({ uid }) => {
+  const generalContext = useContext(GeneralContext);
+
+  const handleBuyClick = () => {
+    generalContext.openBuyWindow(uid);
+  };
+
+  return (
+    <div className="flex items-center gap-2 ml-4">
+      <Tooltip title="Buy (B)" placement="top" arrow TransitionComponent={Grow}>
+        <button
+          onClick={handleBuyClick}
+          className="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded-lg text-xs font-semibold"
+        >
+          Buy
+        </button>
+      </Tooltip>
+
+      <Tooltip title="Sell (S)" placement="top" arrow TransitionComponent={Grow}>
+        <button className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs font-semibold">
+          Sell
+        </button>
+      </Tooltip>
+
+      <Tooltip
+        title="Analytics (A)"
+        placement="top"
+        arrow
+        TransitionComponent={Grow}
+      >
+        <button className="p-2 bg-gray-200 hover:bg-gray-300 rounded-lg">
+          <BarChartOutlined fontSize="small" className="text-gray-700" />
+        </button>
+      </Tooltip>
+
+      <Tooltip title="More" placement="top" arrow TransitionComponent={Grow}>
+        <button className="p-2 bg-gray-200 hover:bg-gray-300 rounded-lg">
+          <MoreHoriz fontSize="small" className="text-gray-700" />
+        </button>
+      </Tooltip>
+    </div>
+  );
+};

@@ -1,3 +1,4 @@
+// src/components/VerticalGraph.js
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -6,17 +7,10 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { Bar } from 'react-chartjs-2';
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export const options = {
   responsive: true,
@@ -26,13 +20,11 @@ export const options = {
     },
     title: {
       display: true,
-      text: 'Holdings',
+      text: "Holdings",
     },
   },
 };
 
-
-
-export function VerticlaGraph({data}) {
+export function VerticalGraph({ data }) {
   return <Bar options={options} data={data} />;
 }

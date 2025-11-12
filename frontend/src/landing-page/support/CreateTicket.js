@@ -1,5 +1,14 @@
 import React from "react";
 
+const LinkButton = ({ children }) => (
+  <button
+    type="button"
+    className="hover:text-blue-600 focus:outline-none focus:text-blue-700"
+  >
+    {children}
+  </button>
+);
+
 const CreateTicket = () => {
   return (
     <div className="bg-gray-50 py-20 px-10 md:px-40">
@@ -14,29 +23,19 @@ const CreateTicket = () => {
           </h2>
           <ol className="list-disc list-inside space-y-2">
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Resident individual
-              </a>
+              <LinkButton>Resident individual</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Minor
-              </a>
+              <LinkButton>Minor</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Non Resident Indian (NRI)
-              </a>
+              <LinkButton>Non Resident Indian (NRI)</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Company, Partnership, HUF and LLP
-              </a>
+              <LinkButton>Company, Partnership, HUF and LLP</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Glossary
-              </a>
+              <LinkButton>Glossary</LinkButton>
             </li>
           </ol>
         </div>
@@ -48,30 +47,20 @@ const CreateTicket = () => {
           </h2>
           <ol className="list-disc list-inside space-y-2">
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Your Profile
-              </a>
+              <LinkButton>Your Profile</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Account modification
-              </a>
+              <LinkButton>Account modification</LinkButton>
             </li>
 
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Client Master Report (CMR) & DP
-              </a>
+              <LinkButton>Client Master Report (CMR) &amp; DP</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Nomination
-              </a>
+              <LinkButton>Nomination</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Transfer & conversion of securities
-              </a>
+              <LinkButton>Transfer &amp; conversion of securities</LinkButton>
             </li>
           </ol>
         </div>
@@ -80,34 +69,22 @@ const CreateTicket = () => {
           <h2 className="text-xl font-semibold text-blue-700 mb-3">Kite</h2>
           <ol className="list-disc list-inside space-y-2">
             <li>
-              <a href="#" className="hover:text-blue-600">
-                IPO General
-              </a>
+              <LinkButton>IPO General</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Trading FAQs
-              </a>
+              <LinkButton>Trading FAQs</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Margin Trading Facility (MTF) and Margins
-              </a>
+              <LinkButton>Margin Trading Facility (MTF) and Margins</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Charts and Orders
-              </a>
+              <LinkButton>Charts and Orders</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Alerts and Nudges
-              </a>
+              <LinkButton>Alerts and Nudges</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                General
-              </a>
+              <LinkButton>General</LinkButton>
             </li>
           </ol>
         </div>
@@ -119,24 +96,16 @@ const CreateTicket = () => {
           </h2>
           <ol className="list-disc list-inside space-y-2">
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Add money
-              </a>
+              <LinkButton>Add money</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Withdraw money
-              </a>
+              <LinkButton>Withdraw money</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Add bank accounts
-              </a>
+              <LinkButton>Add bank accounts</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                eMandates
-              </a>
+              <LinkButton>eMandates</LinkButton>
             </li>
           </ol>
         </div>
@@ -148,34 +117,22 @@ const CreateTicket = () => {
           </h2>
           <ol className="list-disc list-inside space-y-2">
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Portfolio
-              </a>
+              <LinkButton>Portfolio</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Corporate actions
-              </a>
+              <LinkButton>Corporate actions</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Funds statement
-              </a>
+              <LinkButton>Funds statement</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Reports
-              </a>
+              <LinkButton>Reports</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Profile
-              </a>
+              <LinkButton>Profile</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Segments
-              </a>
+              <LinkButton>Segments</LinkButton>
             </li>
           </ol>
         </div>
@@ -187,34 +144,22 @@ const CreateTicket = () => {
           </h2>
           <ol className="list-disc list-inside space-y-2">
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Mutual funds
-              </a>
+              <LinkButton>Mutual funds</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                National Pension Scheme (NPS)
-              </a>
+              <LinkButton>National Pension Scheme (NPS)</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Fixed Deposit (FD)
-              </a>
+              <LinkButton>Fixed Deposit (FD)</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Features on Coin
-              </a>
+              <LinkButton>Features on Coin</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Payments and Orders
-              </a>
+              <LinkButton>Payments and Orders</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                General
-              </a>
+              <LinkButton>General</LinkButton>
             </li>
           </ol>
         </div>
@@ -225,29 +170,19 @@ const CreateTicket = () => {
           </h2>
           <ol className="list-disc list-inside space-y-2">
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Track account opening
-              </a>
+              <LinkButton>Track account opening</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Track segment activation
-              </a>
+              <LinkButton>Track segment activation</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Intraday margins
-              </a>
+              <LinkButton>Intraday margins</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Kite user manual
-              </a>
+              <LinkButton>Kite user manual</LinkButton>
             </li>
             <li>
-              <a href="#" className="hover:text-blue-600">
-                Learn how to create a ticket
-              </a>
+              <LinkButton>Learn how to create a ticket</LinkButton>
             </li>
           </ol>
         </div>

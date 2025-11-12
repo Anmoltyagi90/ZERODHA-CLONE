@@ -3,19 +3,29 @@ import { Link } from "react-router-dom";
 import GeneralContext from "./GeneralContext";
 import axios from "axios";
 
+const API_BASE_URL =
+  process.env.REACT_APP_API_URL || "http://localhost:3002";
+
 const SellActionWindow = ({ uid }) => {
   const [stockQuantity, setStockQuantity] = useState(1);
   const [stockPrice, setStockPrice] = useState(0.0);
 
-  const handleSellClick = async (e) => {
-    e.preventDefault();
+  const handleSellClick = async (event) => {
+    event.preventDefault();
     try {
-      await axios.post("http://localhost:3002/newsell", {
-        name: uid,
-        qtr: stockQuantity,
-        price: stockPrice,
-        mode: "SELL",
-      });
+      const token = localStorage.getItem("token");
+      await axios.post(
+        `${API_BASE_URL}/newOrder`,
+        {
+          name: uid,
+          qty: Number(stockQuantity),
+          price: Number(stockPrice),
+          mode: "SELL",
+        },
+        {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        }
+      );
       closeSellWindow();
       alert("Sell order placed successfully!");
     } catch (err) {
