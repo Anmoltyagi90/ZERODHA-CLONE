@@ -11,6 +11,7 @@ const { HoldingsModel } = require("./model/HoldingsModel");
 const { PositionsModel } = require("./model/PositionsModel");
 const { OrdersModel } = require("./model/OrdersModel");
 
+
 const PORT = process.env.PORT || 3002;
 const uri = process.env.MONGODB_URI;
 const JWT_SECRET = process.env.JWT_SECRET || "development-secret";
