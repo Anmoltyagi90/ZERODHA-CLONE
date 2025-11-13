@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const DashboardRedirect = () => {
   const navigate = useNavigate();
@@ -7,12 +8,26 @@ const DashboardRedirect = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    if (token) {
-      // ✅ Redirect to main dashboard (तुम्हारे frontend/dashboard app का URL)
-      window.location.href = "http://localhost:3000/dashboard"; 
-    } else {
-      // ✅ If not logged in, redirect to login
+    if (!token) {
       navigate("/login");
+    } else {
+      axios
+        .get("https://zerodha-clone-3fa0.onrender.com/auth/verify", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => {
+          if (res.data.valid) {
+            // ✅ Agar token valid hai to redirect dashboard par
+            window.location.href = "https://zerodha-clone-frontend.onrender.com/dashboard";
+          } else {
+            localStorage.removeItem("token");
+            navigate("/login");
+          }
+        })
+        .catch(() => {
+          localStorage.removeItem("token");
+          navigate("/login");
+        });
     }
   }, [navigate]);
 

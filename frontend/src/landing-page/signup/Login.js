@@ -20,7 +20,10 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:3002/auth/login", formData);
+      const res = await axios.post(
+        "https://zerodha-clone-3fa0.onrender.com/auth/login",
+        formData
+      );
 
       // ✅ Token save karo localStorage me
       localStorage.setItem("token", res.data.token);

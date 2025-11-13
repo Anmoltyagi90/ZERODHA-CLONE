@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-frontend/
-backend/
-=======
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -25,4 +21,3 @@ backend/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
->>>>>>> 59600a9 (Added React frontend (dashboard) for Zerodha Clone)

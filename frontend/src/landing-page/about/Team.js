@@ -35,7 +35,12 @@ const Team = () => {
             <p>Playing basketball is his zen.</p>
             <p>
               Connect on{" "}
-              <a href="#" className="text-blue-600 hover:underline font-medium">
+              <a
+                href="https://tradingqna.com" // example external link
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline font-medium"
+              >
                 Homepage / TradingQnA / Twitter
               </a>
             </p>
