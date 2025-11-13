@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "https://zerodha-clone-3fa0.onrender.com/api/$1" },
+    { "source": "/dashboard/(.*)", "destination": "https://zerodha-dashboard.vercel.app/dashboard/$1" }
+  ]
+}
